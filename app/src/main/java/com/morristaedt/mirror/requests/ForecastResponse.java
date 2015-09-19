@@ -11,34 +11,45 @@ public class ForecastResponse {
     float latitude;
     float longitude;
 
-    public ForecastCurrently currently;
-    public ForecastHourly hourly;
+    public DataPoint currently;
+    public DataBlock hourly;
+    public DataBlock daily;
 
-    public class ForecastCurrently {
-        public String summary;
-        public float temperature;
-
-        public String getDisplayTemperature() {
-            return String.valueOf(Math.round(temperature)) + (char) 0x00B0;
-        }
+    public class DataBlock {
+        public ArrayList<DataPoint> data;
     }
 
-    public class ForecastHourly {
-        String summary;
-        public ArrayList<Hour> data;
-    }
-
-    public class Hour {
+    public class DataPoint {
         public long time; // in seconds
         public String summary;
+        public String icon;
         public String precipType;
         public float precipProbability;
         public float temperature;
+        public float temperatureMin;
+        public float temperatureMax;
 
         public Calendar getCalendar() {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time * 1000);
             return calendar;
+        }
+
+        private String toDisplay(float t)
+        {
+            return String.valueOf(Math.round(t)) + (char) 0x00B0;
+        }
+
+        public String getDisplayTemperature() {
+            return toDisplay(temperature);
+        }
+
+        public String getHighTemperature() {
+            return toDisplay(temperatureMax);
+        }
+
+        public String getLowTemperature() {
+            return toDisplay(temperatureMin);
         }
     }
 }

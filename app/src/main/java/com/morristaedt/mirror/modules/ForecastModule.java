@@ -7,10 +7,6 @@ import android.util.Log;
 import com.morristaedt.mirror.R;
 import com.morristaedt.mirror.requests.ForecastRequest;
 import com.morristaedt.mirror.requests.ForecastResponse;
-import com.morristaedt.mirror.utils.WeekUtil;
-
-import java.util.Calendar;
-import java.util.List;
 
 import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
@@ -22,9 +18,9 @@ import retrofit.RetrofitError;
 public class ForecastModule {
 
     public interface ForecastListener {
-        void onWeatherToday(String weatherToday);
-
-        void onShouldBike(boolean showToday, boolean shouldBike);
+        void onWeatherNow(ForecastResponse.DataPoint now);
+        void onWeatherToday(ForecastResponse.DataPoint today);
+        void onWeatherTomorrow(ForecastResponse.DataPoint tomorrow);
     }
 
     public static void getHourlyForecast(final Resources resources, final double lat, final double lon, final ForecastListener listener) {
@@ -44,8 +40,8 @@ public class ForecastModule {
                         .build();
 
                 ForecastRequest service = restAdapter.create(ForecastRequest.class);
-                String excludes = "minutely,daily,flags";
-                String units = "si";
+                String excludes = "alerts,minutely,flags";
+                String units = "us";
                 Log.d("mirror", "backgrounddd");
                 return service.getHourlyForecast(resources.getString(R.string.dark_sky_api_key), lat, lon, excludes, units);
             }
@@ -53,41 +49,20 @@ public class ForecastModule {
             @Override
             protected void onPostExecute(ForecastResponse forecastResponse) {
                 if (forecastResponse != null) {
-                    if (forecastResponse.currently != null) {
-                        listener.onWeatherToday(forecastResponse.currently.getDisplayTemperature() + " " + forecastResponse.currently.summary);
-                    }
-
-                    if (WeekUtil.isWeekday() && !WeekUtil.afterFive() && forecastResponse.hourly != null && forecastResponse.hourly.data != null) {
-                        listener.onShouldBike(true, shouldBikeToday(forecastResponse.hourly.data));
-                    } else {
-                        listener.onShouldBike(false, true);
-                    }
+                    listener.onWeatherNow(forecastResponse.currently);
+                    if (forecastResponse.daily != null
+                            && forecastResponse.daily.data != null
+                            && forecastResponse.daily.data.size() >= 1)
+                        listener.onWeatherToday(forecastResponse.daily.data.get(0));
+                    else
+                        listener.onWeatherToday(null);
+                    if (forecastResponse.daily != null
+                            && forecastResponse.daily.data != null
+                            && forecastResponse.daily.data.size() >= 2)
+                        listener.onWeatherTomorrow(forecastResponse.daily.data.get(1));
+                    else
+                        listener.onWeatherTomorrow(null);
                 }
-            }
-
-            private boolean shouldBikeToday(List<ForecastResponse.Hour> hours) {
-                int dayOfMonthToday = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-
-                for (ForecastResponse.Hour hour : hours) {
-                    Calendar hourCalendar = hour.getCalendar();
-
-                    // Only check hourly forecast for today
-                    if (hourCalendar.get(Calendar.DAY_OF_MONTH) == dayOfMonthToday) {
-                        int hourOfDay = hourCalendar.get(Calendar.HOUR_OF_DAY);
-                        Log.i("mirror", "Hour of day is " + hourOfDay + " with precipProb " + hour.precipProbability);
-                        if (hourOfDay >= 7 && hourOfDay <= 11) {
-                            if (hour.precipProbability >= 0.3) {
-                                return false;
-                            }
-                        } else if (hourOfDay >= 17 && hourOfDay <= 19) {
-                            if (hour.precipProbability >= 0.3) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-
-                return true;
             }
         }.execute();
 
