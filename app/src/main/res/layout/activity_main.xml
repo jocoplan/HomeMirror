@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="right"
+    android:gravity="end"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/birthday_text"
-        style="@style/MirrorText"
+        style="@style/GeneralText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="60sp"
@@ -17,46 +17,55 @@
 
     <TextView
         android:id="@+id/day_text"
-        style="@style/MirrorText"
+        style="@style/GeneralText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Sunday the 22nd" />
 
-    <TextClock
-        style="@style/MirrorText"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:includeFontPadding="false"
-        android:format12Hour="h:mm"
-        android:textSize="90sp" />
+        android:layout_height="wrap_content">
 
+        <TextClock
+            style="@style/ClockText"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="0dp"
+            android:includeFontPadding="false"
+            android:format12Hour="h:mm"/>
+
+        <com.morristaedt.mirror.views.WeatherSubView
+            style="@style/ClockText"
+            android:id="@+id/weather_now"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.morristaedt.mirror.views.MoonView
+            style="@style/ClockText"
+            android:id="@+id/moon_view"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <com.morristaedt.mirror.views.WeatherSubView
-        android:id="@+id/weather_now"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.morristaedt.mirror.views.WeatherSubView
+        style="@style/GeneralText"
         android:id="@+id/weather_today"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.morristaedt.mirror.views.WeatherSubView
+        style="@style/GeneralText"
         android:id="@+id/weather_tomorrow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="vertical">
-    </LinearLayout>
-
 
     <ImageView
         android:id="@+id/xkcd_image"
+        android:contentDescription="xkcdImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"

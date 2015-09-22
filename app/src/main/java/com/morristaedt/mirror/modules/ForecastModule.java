@@ -29,7 +29,7 @@ public class ForecastModule {
             @Override
             protected ForecastResponse doInBackground(Void... params) {
                 RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint("https://api.forecast.io")
+                        .setEndpoint(resources.getString(R.string.forecast_endpoint))
                         .setErrorHandler(new ErrorHandler() {
                             @Override
                             public Throwable handleError(RetrofitError cause) {
@@ -50,12 +50,14 @@ public class ForecastModule {
             protected void onPostExecute(ForecastResponse forecastResponse) {
                 if (forecastResponse != null) {
                     listener.onWeatherNow(forecastResponse.currently);
+
                     if (forecastResponse.daily != null
                             && forecastResponse.daily.data != null
                             && forecastResponse.daily.data.size() >= 1)
                         listener.onWeatherToday(forecastResponse.daily.data.get(0));
                     else
                         listener.onWeatherToday(null);
+
                     if (forecastResponse.daily != null
                             && forecastResponse.daily.data != null
                             && forecastResponse.daily.data.size() >= 2)

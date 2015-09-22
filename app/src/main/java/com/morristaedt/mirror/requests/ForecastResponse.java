@@ -28,6 +28,7 @@ public class ForecastResponse {
         public float temperature;
         public float temperatureMin;
         public float temperatureMax;
+        public float moonPhase;
 
         public Calendar getCalendar() {
             Calendar calendar = Calendar.getInstance();

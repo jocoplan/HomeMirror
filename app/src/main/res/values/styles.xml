@@ -11,13 +11,21 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="MirrorText">
+
+    <style name="GeneralText">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:gravity">right|center_vertical</item>
         <item name="android:drawablePadding">8dp</item>
     </style>
 
-    <style name="MirrorListText" parent="MirrorText">
+    <style name="ClockText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:textSize">90sp</item>
+        <item name="android:drawablePadding">8dp</item>
+    </style>
+
+    <style name="MirrorListText" parent="GeneralText">
         <item name="android:paddingBottom">20dp</item>
     </style>
 </resources>
