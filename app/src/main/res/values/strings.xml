@@ -9,9 +9,14 @@
     <string name="bedtime">Good evening, %s\n\nIt\'s Hannah\'s bedtime.</string>
 
     <!-- Forecast module -->
+    <string name="forecast_endpoint">https://api.forecast.io</string>
     <string name="lat">40.264338</string>
     <string name="lon">-76.938556</string>
 
     <!--  Birthday module -->
     <string name="happy_birthday">Happy Birthday, %s!</string>
+
+    <!-- Strava module -->
+    <string name="strava_endpoint">https://www.strava.com/api/v3/</string>
+
 </resources>

@@ -16,6 +16,7 @@ import com.morristaedt.mirror.modules.DayModule;
 import com.morristaedt.mirror.modules.ForecastModule;
 import com.morristaedt.mirror.modules.XKCDModule;
 import com.morristaedt.mirror.requests.ForecastResponse;
+import com.morristaedt.mirror.views.MoonView;
 import com.morristaedt.mirror.views.WeatherSubView;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +26,7 @@ public class MirrorActivity extends AppCompatActivity {
 
     private TextView mBirthdayText;
     private TextView mDayText;
+    private MoonView moonView;
     private WeatherSubView mWeatherNow;
     private WeatherSubView mWeatherToday;
     private WeatherSubView mWeatherTomorrow;
@@ -73,6 +75,7 @@ public class MirrorActivity extends AppCompatActivity {
         @Override
         public void onWeatherToday(ForecastResponse.DataPoint today) {
             doHighLowIcon(mWeatherToday, today);
+            moonView.setMoonPhase(today.moonPhase);
         }
 
         @Override
@@ -98,6 +101,7 @@ public class MirrorActivity extends AppCompatActivity {
 
         mBirthdayText = (TextView) findViewById(R.id.birthday_text);
         mDayText = (TextView) findViewById(R.id.day_text);
+        moonView = (MoonView) findViewById(R.id.moon_view);
         mWeatherNow = (WeatherSubView) findViewById(R.id.weather_now);
         mWeatherToday = (WeatherSubView) findViewById(R.id.weather_today);
         mWeatherTomorrow = (WeatherSubView) findViewById(R.id.weather_tomorrow);
