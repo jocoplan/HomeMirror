@@ -14,11 +14,16 @@ import android.widget.TextView;
 import com.morristaedt.mirror.modules.BirthdayModule;
 import com.morristaedt.mirror.modules.DayModule;
 import com.morristaedt.mirror.modules.ForecastModule;
+import com.morristaedt.mirror.modules.StravaModule;
+import com.morristaedt.mirror.modules.StravaModule.StravaListener;
 import com.morristaedt.mirror.modules.XKCDModule;
 import com.morristaedt.mirror.requests.ForecastResponse;
+import com.morristaedt.mirror.requests.StravaActivity;
 import com.morristaedt.mirror.views.MoonView;
 import com.morristaedt.mirror.views.WeatherSubView;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class MirrorActivity extends AppCompatActivity {
 
@@ -26,6 +31,8 @@ public class MirrorActivity extends AppCompatActivity {
 
     private TextView mBirthdayText;
     private TextView mDayText;
+    private TextView mMilesRan;
+    private TextView mMilesBiked;
     private MoonView moonView;
     private WeatherSubView mWeatherNow;
     private WeatherSubView mWeatherToday;
@@ -41,6 +48,28 @@ public class MirrorActivity extends AppCompatActivity {
                 Picasso.with(MirrorActivity.this).load(url).into(mXKCDImage);
                 mXKCDImage.setVisibility(View.VISIBLE);
             }
+        }
+    };
+
+    private StravaListener stravaListener = new StravaListener() {
+        @Override
+        public void receiveWeeklyActivities(List<StravaActivity> activities) {
+            float totalRunMeters = 0;
+            float totalBikeMeters = 0;
+            for (StravaActivity activity : activities)
+            {
+                if ("Ride".equals(activity.type))
+                    totalBikeMeters += activity.distance;
+                if ("Run".equals(activity.type))
+                    totalRunMeters += activity.distance;
+            }
+
+            // Convert meters to miles
+            float totalRunMiles = totalRunMeters / 1609.34f;
+            float totalBikeMiles = totalBikeMeters / 1609.34f;
+
+            mMilesRan.setText(String.format("Ran: %.2f mi", totalRunMiles));
+            mMilesBiked.setText(String.format("Biked: %.2f mi", totalBikeMiles));
         }
     };
 
@@ -106,6 +135,8 @@ public class MirrorActivity extends AppCompatActivity {
         mWeatherToday = (WeatherSubView) findViewById(R.id.weather_today);
         mWeatherTomorrow = (WeatherSubView) findViewById(R.id.weather_tomorrow);
         mXKCDImage = (ImageView) findViewById(R.id.xkcd_image);
+        mMilesRan = (TextView) findViewById(R.id.miles_ran);
+        mMilesBiked = (TextView) findViewById(R.id.miles_biked);
 
         //Negative of XKCD image
         float[] colorMatrixNegative = {
@@ -143,6 +174,10 @@ public class MirrorActivity extends AppCompatActivity {
                 mForecastListener);
 
         XKCDModule.getXKCDForToday(mXKCDListener);
+
+        StravaModule.getWeeklyExercise(getResources(),
+                getResources().getString(R.string.danielle_token),
+                stravaListener);
     }
 
     private void showDemoMode() {

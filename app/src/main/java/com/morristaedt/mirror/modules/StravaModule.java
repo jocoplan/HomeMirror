@@ -9,6 +9,7 @@ import com.morristaedt.mirror.requests.StravaActivity;
 import com.morristaedt.mirror.requests.StravaRequest;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class StravaModule {
 
     public interface StravaListener
     {
-
+        void receiveWeeklyActivities(List<StravaActivity> activities);
     }
 
     public static void getWeeklyExercise(final Resources resources, final String athlete_token, final StravaListener listener) {
@@ -36,7 +37,7 @@ public class StravaModule {
                         .setErrorHandler(new ErrorHandler() {
                             @Override
                             public Throwable handleError(RetrofitError cause) {
-                                Log.w("mirror", "Forecast error: " + cause);
+                                Log.w("mirror", "Strava error: " + cause);
                                 return null;
                             }
                         })
@@ -44,9 +45,11 @@ public class StravaModule {
 
                 DateTime dateTime = new DateTime();
                 dateTime = dateTime.withTime(0, 0, 0, 0); // Roll the time to the start of the day
-                dateTime = dateTime.minusDays(7); // One week ago
+                dateTime = dateTime.withDayOfWeek(DateTimeConstants.MONDAY);
+                //  dateTime = dateTime.minusDays(7); // One week ago
 
-                final long after = dateTime.toInstant().getMillis();
+                final long after = dateTime.toInstant().getMillis() / 1000; // After is in seconds after the UNIX epoch
+
 
                 StravaRequest service = restAdapter.create(StravaRequest.class);
                 return service.getActivitiesSince(athlete_token, after);
@@ -55,7 +58,7 @@ public class StravaModule {
             @Override
             protected void onPostExecute(List<StravaActivity> stravaResponse) {
                 if (stravaResponse != null) {
-
+                    listener.receiveWeeklyActivities(stravaResponse);
                 }
             }
         }.execute();

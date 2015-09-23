@@ -63,6 +63,21 @@
         android:layout_height="wrap_content" />
 
 
+    <TextView
+        android:id="@+id/miles_ran"
+        style="@style/GeneralText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Miles Ran: 10"/>
+
+
+    <TextView
+        android:id="@+id/miles_biked"
+        style="@style/GeneralText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Miles Biked: 100" />
+
     <ImageView
         android:id="@+id/xkcd_image"
         android:contentDescription="xkcdImage"
