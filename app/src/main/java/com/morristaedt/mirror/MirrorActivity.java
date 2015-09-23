@@ -20,6 +20,7 @@ import com.morristaedt.mirror.modules.XKCDModule;
 import com.morristaedt.mirror.requests.ForecastResponse;
 import com.morristaedt.mirror.requests.StravaActivity;
 import com.morristaedt.mirror.views.MoonView;
+import com.morristaedt.mirror.views.StravaView;
 import com.morristaedt.mirror.views.WeatherSubView;
 import com.squareup.picasso.Picasso;
 
@@ -31,8 +32,10 @@ public class MirrorActivity extends AppCompatActivity {
 
     private TextView mBirthdayText;
     private TextView mDayText;
-    private TextView mMilesRan;
-    private TextView mMilesBiked;
+
+    private StravaView mMilesRan;
+    private StravaView mMilesBiked;
+
     private MoonView moonView;
     private WeatherSubView mWeatherNow;
     private WeatherSubView mWeatherToday;
@@ -68,8 +71,8 @@ public class MirrorActivity extends AppCompatActivity {
             float totalRunMiles = totalRunMeters / 1609.34f;
             float totalBikeMiles = totalBikeMeters / 1609.34f;
 
-            mMilesRan.setText(String.format("Ran: %.2f mi", totalRunMiles));
-            mMilesBiked.setText(String.format("Biked: %.2f mi", totalBikeMiles));
+            mMilesRan.setDistance(totalRunMiles);
+            mMilesBiked.setDistance(totalBikeMiles);
         }
     };
 
@@ -135,8 +138,8 @@ public class MirrorActivity extends AppCompatActivity {
         mWeatherToday = (WeatherSubView) findViewById(R.id.weather_today);
         mWeatherTomorrow = (WeatherSubView) findViewById(R.id.weather_tomorrow);
         mXKCDImage = (ImageView) findViewById(R.id.xkcd_image);
-        mMilesRan = (TextView) findViewById(R.id.miles_ran);
-        mMilesBiked = (TextView) findViewById(R.id.miles_biked);
+        mMilesRan = (StravaView) findViewById(R.id.miles_ran);
+        mMilesBiked = (StravaView) findViewById(R.id.miles_biked);
 
         //Negative of XKCD image
         float[] colorMatrixNegative = {

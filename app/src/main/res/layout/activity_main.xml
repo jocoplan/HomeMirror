@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="end"
@@ -62,21 +63,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-
-    <TextView
+    <com.morristaedt.mirror.views.StravaView
+        style="@style/GeneralText"
+        custom:activity_type="run"
         android:id="@+id/miles_ran"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.morristaedt.mirror.views.StravaView
         style="@style/GeneralText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Miles Ran: 10"/>
-
-
-    <TextView
+        custom:activity_type="bicycle"
         android:id="@+id/miles_biked"
-        style="@style/GeneralText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Miles Biked: 100" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/xkcd_image"
