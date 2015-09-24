@@ -43,6 +43,7 @@ public class MoonView extends TextView {
 
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
         this.setTypeface(font);
+        style.recycle();
     }
 
     public void setMoonPhase(float moonPhase)

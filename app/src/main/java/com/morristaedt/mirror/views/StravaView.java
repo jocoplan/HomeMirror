@@ -2,6 +2,7 @@ package com.morristaedt.mirror.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -40,7 +41,7 @@ public class StravaView extends LinearLayout {
         icon = (ImageView) findViewById(R.id.strava_icon);
         text = (TextView) findViewById(R.id.strava_text);
 
-        int[] styleList = {android.R.attr.textSize};
+        int[] styleList = {android.R.attr.textSize, android.R.attr.fontFamily};
         // Set the style to TextView
         TypedArray style = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -51,6 +52,12 @@ public class StravaView extends LinearLayout {
         int size = style.getDimensionPixelSize(0, 12);
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
+        Typeface font = Typeface.create(style.getString(1), 0);
+        text.setTypeface(font);
+
+
+        style.recycle();
+
         style = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.StravaView,
@@ -59,6 +66,7 @@ public class StravaView extends LinearLayout {
         );
 
         String type = style.getString(R.styleable.StravaView_activity_type);
+        style.recycle();
 
         if ("bicycle".equals(type))
             icon.setImageResource(R.drawable.bicycle);

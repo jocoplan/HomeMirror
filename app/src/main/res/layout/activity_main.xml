@@ -16,38 +16,53 @@
         android:visibility="gone"
         tools:text="Happy Birthday Andy!" />
 
-    <TextView
-        android:id="@+id/day_text"
-        style="@style/GeneralText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Sunday the 22nd" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextClock
-            style="@style/ClockText"
+        <TextView
+            android:id="@+id/day_text"
+            style="@style/GeneralText"
+            android:layout_gravity="center_vertical|end"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="0dp"
-            android:includeFontPadding="false"
-            android:format12Hour="h:mm"/>
+            android:layout_height="wrap_content"
+            tools:text="Sunday the 22nd" />
+
+        <com.morristaedt.mirror.views.MoonView
+            style="@style/GeneralText"
+            android:id="@+id/moon_view"
+            android:layout_gravity="center_vertical|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <com.morristaedt.mirror.views.WeatherSubView
             style="@style/ClockText"
             android:id="@+id/weather_now"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingEnd="50dp"/>
 
-        <com.morristaedt.mirror.views.MoonView
+        <TextClock
             style="@style/ClockText"
-            android:id="@+id/moon_view"
-            android:layout_gravity="center_vertical"
+            android:gravity="end"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:includeFontPadding="false"
+            android:format12Hour="h:mm"/>
 
     </LinearLayout>
 

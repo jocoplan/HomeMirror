@@ -62,7 +62,7 @@ public class WeatherSubView extends LinearLayout {
         icon = (TextView) findViewById(R.id.weather_icon);
         text = (TextView) findViewById(R.id.weather_text);
 
-        int[] styleList = {android.R.attr.textSize};
+        int[] styleList = {android.R.attr.textSize, android.R.attr.fontFamily};
         // Set the style across both TextFields
         TypedArray style = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -74,8 +74,12 @@ public class WeatherSubView extends LinearLayout {
         icon.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
+        Typeface font = Typeface.create(style.getString(1), 0);
+        text.setTypeface(font);
+
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
         icon.setTypeface(font);
+        style.recycle();
     }
 
     public void setIcon(String iconStr)
