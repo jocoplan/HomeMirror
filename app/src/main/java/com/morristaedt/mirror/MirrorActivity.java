@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.morristaedt.mirror.modules.BirthdayModule;
 import com.morristaedt.mirror.modules.DayModule;
 import com.morristaedt.mirror.modules.ForecastModule;
+import com.morristaedt.mirror.modules.GuageModule;
 import com.morristaedt.mirror.modules.StravaModule;
 import com.morristaedt.mirror.modules.StravaModule.StravaListener;
 import com.morristaedt.mirror.modules.XKCDModule;
@@ -35,6 +36,7 @@ public class MirrorActivity extends AppCompatActivity {
 
     private StravaView mMilesRan;
     private StravaView mMilesBiked;
+    private TextView guageHeightText;
 
     private MoonView moonView;
     private WeatherSubView mWeatherNow;
@@ -116,20 +118,19 @@ public class MirrorActivity extends AppCompatActivity {
         }
     };
 
+    private GuageModule.GuageListener mGuageListener = new GuageModule.GuageListener() {
+        @Override
+        public void receiveGuageHeight(String height) {
+            guageHeightText.setText( height );
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        hideStatus();
 
         mBirthdayText = (TextView) findViewById(R.id.birthday_text);
         mDayText = (TextView) findViewById(R.id.day_text);
@@ -137,19 +138,14 @@ public class MirrorActivity extends AppCompatActivity {
         mWeatherNow = (WeatherSubView) findViewById(R.id.weather_now);
         mWeatherToday = (WeatherSubView) findViewById(R.id.weather_today);
         mWeatherTomorrow = (WeatherSubView) findViewById(R.id.weather_tomorrow);
-        mXKCDImage = (ImageView) findViewById(R.id.xkcd_image);
+
         mMilesRan = (StravaView) findViewById(R.id.miles_ran);
         mMilesBiked = (StravaView) findViewById(R.id.miles_biked);
+        guageHeightText = (TextView) findViewById(R.id.guage_height_text);
 
-        //Negative of XKCD image
-        float[] colorMatrixNegative = {
-                -1.0f, 0, 0, 0, 255, //red
-                0, -1.0f, 0, 0, 255, //green
-                0, 0, -1.0f, 0, 255, //blue
-                0, 0, 0, 1.0f, 0 //alpha
-        };
-        ColorFilter colorFilterNegative = new ColorMatrixColorFilter(colorMatrixNegative);
-//        mXKCDImage.setColorFilter(colorFilterNegative); // not inverting for now
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+        getWindow().setAttributes(params);
 
         setViewState();
     }
@@ -161,6 +157,8 @@ public class MirrorActivity extends AppCompatActivity {
     }
 
     private void setViewState() {
+        hideStatus();
+
         String birthday = BirthdayModule.getBirthday();
         if (TextUtils.isEmpty(birthday)) {
             mBirthdayText.setVisibility(View.GONE);
@@ -176,11 +174,27 @@ public class MirrorActivity extends AppCompatActivity {
                 Float.parseFloat(getResources().getString(R.string.lon)),
                 mForecastListener);
 
-        XKCDModule.getXKCDForToday(mXKCDListener);
-
         StravaModule.getWeeklyExercise(getResources(),
                 getResources().getString(R.string.danielle_token),
                 stravaListener);
+
+        GuageModule.getGuageHeight(getResources(),
+                mGuageListener
+                );
+    }
+
+    private void hideStatus() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (getActionBar() != null)
+            getActionBar().hide();
     }
 
     private void showDemoMode() {

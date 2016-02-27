@@ -19,4 +19,7 @@
     <!-- Strava module -->
     <string name="strava_endpoint">https://www.strava.com/api/v3/</string>
 
+    <string name="usgs_endpoint">http://waterservices.usgs.gov/nwis/iv/?format=waterml,2.0&amp;indent=on&amp;sites=01570000&amp;parameterCd=00060,00065</string>
+    <string name="usgs_xpath">//om:OM_Observation[om:observedProperty/@xlink:title=\'Gage height\']//wml2:value/text()</string>
+
 </resources>
