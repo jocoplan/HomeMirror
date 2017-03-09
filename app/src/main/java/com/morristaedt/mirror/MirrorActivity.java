@@ -178,6 +178,10 @@ public class MirrorActivity extends AppCompatActivity {
                 getResources().getString(R.string.danielle_token),
                 stravaListener);
 
+//        StravaModule.getNineDayCycle(getResources(),
+//                getResources().getString(R.string.danielle_token),
+//                stravaListener);
+
         GuageModule.getGuageHeight(getResources(),
                 mGuageListener
                 );
